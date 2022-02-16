@@ -5,11 +5,6 @@ import { Usuario } from '../../usuario/entities/usuario.entity';
 
 @Entity('respostas')
 export class Resposta extends EntidadeBase {
-  @PrimaryColumn()
-  id_topico: string;
-
-  @PrimaryColumn()
-  id_usuario: string;
 
   @Column()
   texto: string;

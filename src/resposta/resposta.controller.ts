@@ -3,7 +3,7 @@ import { RespostaService } from './resposta.service';
 import { CreateRespostaDto } from './dto/create-resposta.dto';
 import { UpdateRespostaDto } from './dto/update-resposta.dto';
 
-@Controller('resposta')
+@Controller('api/resposta')
 export class RespostaController {
   constructor(private readonly respostaService: RespostaService) {}
 
@@ -17,18 +17,18 @@ export class RespostaController {
     return this.respostaService.findAll();
   }
 
-  @Get(':id')
+  @Get('/:id')
   findOne(@Param('id') id: string) {
-    return this.respostaService.findOne(+id);
+    return this.respostaService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('/:id')
   update(@Param('id') id: string, @Body() updateRespostaDto: UpdateRespostaDto) {
-    return this.respostaService.update(+id, updateRespostaDto);
+    return this.respostaService.update(id, updateRespostaDto);
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   remove(@Param('id') id: string) {
-    return this.respostaService.remove(+id);
+    return this.respostaService.remove(id);
   }
 }

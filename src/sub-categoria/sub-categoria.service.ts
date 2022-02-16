@@ -1,26 +1,47 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSubCategoriaDto } from './dto/create-sub-categoria.dto';
 import { UpdateSubCategoriaDto } from './dto/update-sub-categoria.dto';
-
+import { SubCategoriaRepository } from './sub-categoria.repository';
+import {InjectRepository} from '@nestjs/typeorm'
+import { CategoriaRepository } from '../categoria/categoria.repository';
 @Injectable()
 export class SubCategoriaService {
-  create(createSubCategoriaDto: CreateSubCategoriaDto) {
-    return 'This action adds a new subCategoria';
+
+  constructor(@InjectRepository(SubCategoriaRepository)
+  private repository:SubCategoriaRepository,
+  @InjectRepository(CategoriaRepository)
+  private categoriaRepository:CategoriaRepository){}
+
+
+
+  async create(createSubCategoriaDto: CreateSubCategoriaDto):Promise<any> {
+    let entity = await this.repository.create(createSubCategoriaDto)
+    
+    if(createSubCategoriaDto.id_pai){
+      let pai = await this.categoriaRepository.findOne(createSubCategoriaDto.id_pai)
+      if(pai)
+        entity.categoria = pai
+    }
+      this.repository.save(entity)
+
+    return entity;
   }
 
-  findAll() {
-    return `This action returns all subCategoria`;
+  async findAll() :Promise<any>{
+    return await this.repository.find(undefined)
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} subCategoria`;
+   async findOne(id: string):Promise<any> {
+    return await this.repository.findOne(id)   
+
   }
 
-  update(id: number, updateSubCategoriaDto: UpdateSubCategoriaDto) {
-    return `This action updates a #${id} subCategoria`;
+  async update(id: string, updateSubCategoriaDto: UpdateSubCategoriaDto):Promise<any> {
+    
+    return  await this.repository.update(id,updateSubCategoriaDto)
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} subCategoria`;
+  async remove(id: string) :Promise<any> {
+    return  await this.repository.delete(id)
   }
 }
