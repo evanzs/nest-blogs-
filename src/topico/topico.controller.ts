@@ -31,6 +31,16 @@ export class TopicoController {
     return this.topicoService.findOne(id);
   }
 
+  @Get('usuario/:id')
+  async findUsuario(@Param('id') id: string): Promise<any> {
+    return this.topicoService.findUsuario(id);
+  }
+
+  @Get('topico/:id')
+  async findTopico(@Param('id') id: string): Promise<any> {
+    return this.topicoService.findTopico(id);
+  }
+
   @Patch('/:id')
   async update(
     @Param('id') id: string,

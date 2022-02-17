@@ -1,5 +1,5 @@
 import EntidadeBase from '../../app.entidade-base.entity';
-import { Entity, PrimaryColumn, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Usuario } from '../../usuario/entities/usuario.entity';
 
 @Entity('topico')
@@ -14,7 +14,6 @@ export class Topico extends EntidadeBase {
   @JoinColumn()
   usuario: Usuario;
 
-  @OneToOne(() => Topico)
-  @JoinColumn()
-  topico: Topico;
+  @OneToMany(() => Topico, (topico) => topico.subTopico)
+  subTopico: Topico[];
 }

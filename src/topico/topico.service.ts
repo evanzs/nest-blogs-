@@ -18,16 +18,16 @@ export class TopicoService {
 
   async create(createTopicoDto: CreateTopicoDto): Promise<any> {
     const created = await this.repository.create(createTopicoDto);
-    if (createTopicoDto.id_usuario) {
+    if (createTopicoDto?.id_usuario) {
       const user = await await this.usuarioRepository.findOne(
         createTopicoDto?.id_usuario,
       );
       if (user) created.usuario = user;
     }
 
-    if (createTopicoDto.id_pai) {
-      const topic = await await this.repository.findOne(createTopicoDto.id_pai);
-      if (topic) created.topico = topic;
+    if (createTopicoDto?.id_pai) {
+      const topic = await this.repository.findOne(createTopicoDto.id_pai);
+      if (topic) created.subTopico.push(topic);
     }
 
     await this.repository.save(created);
@@ -41,16 +41,25 @@ export class TopicoService {
   }
 
   async findTopico(id: string): Promise<any> {
-    const teste = await this.repository.find({
-      where: {},
+    const topico = await this.repository.find({
+      where: { topicoId: id },
     });
-    return teste;
+    return topico;
   }
 
   async findUsuario(id: string): Promise<any> {
-    const teste = await this.repository.findOne(id);
+    const entity = await this.repository.find({
+      where: {
+        usuarioId: id,
+      },
+    });
 
-    return teste;
+    return entity;
+  }
+
+  async findOne(id: string): Promise<any> {
+    const topico = await this.repository.findOne(id);
+    return topico;
   }
   async update(id: string, updateTopicoDto: UpdateTopicoDto): Promise<any> {
     return await this.repository.update(id, updateTopicoDto);
